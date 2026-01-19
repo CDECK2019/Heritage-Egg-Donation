@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Process from './pages/Process';
 import Calculator from './pages/Calculator';
 import About from './pages/About';
+import Contact from './pages/Contact';
 
 const Navbar = () => {
   const location = useLocation();
@@ -38,6 +39,12 @@ const Navbar = () => {
             >
               Valuation
             </Link>
+            <Link 
+              to="/contact" 
+              className={`text-sm uppercase tracking-widest transition-colors ${isActive('/contact') ? 'text-amber-800 border-b border-amber-800' : 'text-stone-500 hover:text-stone-900'}`}
+            >
+              Contact
+            </Link>
           </div>
           <div className="md:hidden">
             <span className="text-stone-400">Menu</span>
@@ -63,6 +70,7 @@ const Footer = () => (
           <li><Link to="/about" className="hover:text-amber-200 transition-colors">About Us</Link></li>
           <li><Link to="/process" className="hover:text-amber-200 transition-colors">The Donation Process</Link></li>
           <li><Link to="/calculator" className="hover:text-amber-200 transition-colors">Compensation Calculator</Link></li>
+          <li><Link to="/contact" className="hover:text-amber-200 transition-colors">Submit Contact Info</Link></li>
         </ul>
       </div>
       <div>
@@ -89,6 +97,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/process" element={<Process />} />
             <Route path="/calculator" element={<Calculator />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
         <Footer />

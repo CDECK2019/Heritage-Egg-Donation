@@ -17,7 +17,7 @@ const Home: React.FC = () => {
           <div className="absolute inset-0 nostalgic-overlay opacity-25"></div>
         </div>
         
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
           <span className="text-white/95 text-xs uppercase tracking-[0.4em] font-semibold mb-6 block animate-fade-in drop-shadow-md">The Gift of New Beginnings</span>
           <h1 className="text-5xl md:text-7xl font-serif text-white mb-8 tracking-tight leading-tight drop-shadow-xl">
             Create a legacy <br /> of <span className="italic font-light">boundless love.</span>
@@ -25,16 +25,22 @@ const Home: React.FC = () => {
           <p className="text-xl md:text-2xl text-white/95 mb-10 font-light leading-relaxed max-w-2xl mx-auto drop-shadow-lg">
             Become an egg donor and plant the seeds of a family. Help others experience the miracle of life through a journey of grace and exceptional care.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
               to="/calculator" 
-              className="px-10 py-5 bg-white text-stone-900 text-sm uppercase tracking-widest font-semibold hover:bg-amber-50 transition-all transform hover:-translate-y-1 shadow-2xl"
+              className="px-8 py-5 bg-white text-stone-900 text-sm uppercase tracking-widest font-semibold hover:bg-amber-50 transition-all transform hover:-translate-y-1 shadow-2xl min-w-[240px]"
             >
               Estimate Your Valuation
             </Link>
             <Link 
+              to="/contact" 
+              className="px-8 py-5 bg-amber-800 text-white text-sm uppercase tracking-widest font-semibold hover:bg-amber-700 transition-all transform hover:-translate-y-1 shadow-2xl min-w-[240px]"
+            >
+              Submit Contact Info
+            </Link>
+            <Link 
               to="/process" 
-              className="px-10 py-5 bg-white/10 backdrop-blur-md border border-white/40 text-white text-sm uppercase tracking-widest hover:bg-white/20 transition-all shadow-lg"
+              className="px-8 py-5 bg-white/10 backdrop-blur-md border border-white/40 text-white text-sm uppercase tracking-widest hover:bg-white/20 transition-all shadow-lg min-w-[200px]"
             >
               The Journey
             </Link>
