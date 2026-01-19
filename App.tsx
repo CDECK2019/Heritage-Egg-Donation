@@ -75,7 +75,7 @@ const Footer = () => (
       </div>
       <div>
         <h4 className="text-xs uppercase tracking-widest text-white mb-6">Contact</h4>
-        <p className="text-sm font-light mb-2">info@heritage-eggs.com</p>
+        <p className="text-sm font-light mb-2">info@heritage-egg-donation.com</p>
         <p className="text-sm font-light italic mt-4">Partnering with elite clinics nationwide.</p>
       </div>
     </div>
