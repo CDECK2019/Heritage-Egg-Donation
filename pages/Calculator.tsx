@@ -7,7 +7,9 @@ const Calculator: React.FC = () => {
   const [selections, setSelections] = useState<CalculatorState>({});
   const [total, setTotal] = useState(BASE_COMPENSATION);
   const [showForm, setShowForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const premiums = (Object.values(selections) as number[]).reduce((acc, val) => acc + val, 0);
@@ -21,10 +23,46 @@ const Calculator: React.FC = () => {
     }));
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // In a real application, you would send the 'selections' and contact info to your backend or Formspree here.
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    
+    // Web3Forms API using your access key
+    formData.append("access_key", "5bc45b91-490b-4896-a20d-79c8bf2db27d"); 
+    formData.append("subject", `New Heritage Valuation: $${total.toLocaleString()}`);
+    formData.append("from_name", "Heritage Site - Valuation Checklist");
+
+    // Append breakdown of selections to the email so the lead is fully detailed
+    Object.entries(selections).forEach(([qId, premium]) => {
+      const question = VALUATION_QUESTIONS.find(q => q.id === qId);
+      const option = question?.options.find(opt => opt.premium === premium);
+      if (question && option) {
+        // We use the question label as the field name in the email
+        formData.append(`selection_${question.label.replace(/\s+/g, '_').toLowerCase()}`, option.label);
+      }
+    });
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setIsSubmitted(true);
+      } else {
+        setError("Submission failed. Please try again or email us directly.");
+      }
+    } catch (err) {
+      setError("Connection error. Please check your internet.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const progress = Math.round((Object.keys(selections).length / VALUATION_QUESTIONS.length) * 100);
@@ -45,7 +83,7 @@ const Calculator: React.FC = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 mt-16 grid lg:grid-cols-12 gap-12">
-        {/* Main Form */}
+        {/* Main Checklist */}
         <div className="lg:col-span-8">
           <div className="bg-white border border-stone-200 p-8 md:p-12 shadow-sm rounded-sm">
             <div className="mb-12">
@@ -100,7 +138,7 @@ const Calculator: React.FC = () => {
           </div>
         </div>
 
-        {/* Sidebar */}
+        {/* Dynamic Sidebar */}
         <div className="lg:col-span-4">
           <div className="sticky top-32">
             <div className="bg-stone-900 text-white p-10 shadow-2xl rounded-sm transition-all duration-500 min-h-[500px] flex flex-col">
@@ -152,39 +190,54 @@ const Calculator: React.FC = () => {
                       </button>
                       <h3 className="text-2xl font-serif text-amber-100 mb-6">Begin Your Journey</h3>
                       <form onSubmit={handleFormSubmit} className="space-y-4">
+                        {/* Honeypot Spam Protection */}
+                        <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} />
+                        
+                        {/* Summary Data */}
+                        <input type="hidden" name="estimated_valuation" value={`$${total.toLocaleString()}`} />
+                        
                         <div>
                           <label className="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Full Name</label>
                           <input 
+                            name="name"
                             required 
                             type="text" 
-                            className="w-full bg-stone-800 border-none p-3 text-white text-sm focus:ring-1 focus:ring-amber-500 rounded-sm" 
+                            className="w-full bg-stone-800 border-none p-3 text-white text-sm focus:ring-1 focus:ring-amber-500 rounded-sm outline-none" 
                             placeholder="Your Name"
                           />
                         </div>
                         <div>
                           <label className="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Email Address</label>
                           <input 
+                            name="email"
                             required 
                             type="email" 
-                            className="w-full bg-stone-800 border-none p-3 text-white text-sm focus:ring-1 focus:ring-amber-500 rounded-sm" 
+                            className="w-full bg-stone-800 border-none p-3 text-white text-sm focus:ring-1 focus:ring-amber-500 rounded-sm outline-none" 
                             placeholder="email@example.com"
                           />
                         </div>
                         <div>
                           <label className="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Phone Number</label>
                           <input 
+                            name="phone"
                             required 
                             type="tel" 
-                            className="w-full bg-stone-800 border-none p-3 text-white text-sm focus:ring-1 focus:ring-amber-500 rounded-sm" 
+                            className="w-full bg-stone-800 border-none p-3 text-white text-sm focus:ring-1 focus:ring-amber-500 rounded-sm outline-none" 
                             placeholder="(555) 000-0000"
                           />
                         </div>
+
+                        {error && (
+                          <p className="text-red-400 text-[10px] uppercase tracking-widest text-center mt-2 font-medium">{error}</p>
+                        )}
+
                         <div className="pt-4">
                           <button 
+                            disabled={isSubmitting}
                             type="submit"
-                            className="w-full py-5 bg-amber-800 hover:bg-amber-700 text-white text-xs uppercase tracking-widest font-bold transition-all shadow-xl"
+                            className="w-full py-5 bg-amber-800 hover:bg-amber-700 text-white text-xs uppercase tracking-widest font-bold transition-all shadow-xl disabled:opacity-50"
                           >
-                            Finalize Assessment
+                            {isSubmitting ? 'Processing...' : 'Finalize Assessment'}
                           </button>
                         </div>
                         <p className="text-[10px] text-stone-500 italic text-center leading-relaxed">

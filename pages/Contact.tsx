@@ -2,11 +2,39 @@
 import React, { useState } from 'react';
 
 const Contact: React.FC = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    // Web3Forms API using the provided access key
+    formData.append("access_key", "5bc45b91-490b-4896-a20d-79c8bf2db27d"); 
+    formData.append("subject", "New General Inquiry from Heritage Site");
+    formData.append("from_name", "Heritage Site - Contact");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        setError("Something went wrong. Please try again or email us directly.");
+      }
+    } catch (err) {
+      setError("Connection error. Please check your internet and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -28,9 +56,13 @@ const Contact: React.FC = () => {
             <div className="bg-white p-10 md:p-12 border border-stone-200 shadow-sm rounded-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
               <h2 className="text-2xl font-serif text-stone-900 mb-8 text-center">Inquiry Form</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Honeypot Spam Protection */}
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} />
+
                 <div>
                   <label className="block text-[10px] uppercase tracking-widest text-stone-500 font-semibold mb-2">Full Name</label>
                   <input 
+                    name="name"
                     required 
                     type="text" 
                     className="w-full bg-[#fcfaf7] border border-stone-200 p-4 text-stone-900 text-sm focus:ring-1 focus:ring-amber-800 focus:border-amber-800 rounded-sm outline-none transition-all" 
@@ -40,6 +72,7 @@ const Contact: React.FC = () => {
                 <div>
                   <label className="block text-[10px] uppercase tracking-widest text-stone-500 font-semibold mb-2">Email Address</label>
                   <input 
+                    name="email"
                     required 
                     type="email" 
                     className="w-full bg-[#fcfaf7] border border-stone-200 p-4 text-stone-900 text-sm focus:ring-1 focus:ring-amber-800 focus:border-amber-800 rounded-sm outline-none transition-all" 
@@ -49,6 +82,7 @@ const Contact: React.FC = () => {
                 <div>
                   <label className="block text-[10px] uppercase tracking-widest text-stone-500 font-semibold mb-2">Phone Number</label>
                   <input 
+                    name="phone"
                     required 
                     type="tel" 
                     className="w-full bg-[#fcfaf7] border border-stone-200 p-4 text-stone-900 text-sm focus:ring-1 focus:ring-amber-800 focus:border-amber-800 rounded-sm outline-none transition-all" 
@@ -57,18 +91,24 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-[10px] uppercase tracking-widest text-stone-500 font-semibold mb-2">Preferred Contact Method</label>
-                  <select className="w-full bg-[#fcfaf7] border border-stone-200 p-4 text-stone-900 text-sm focus:ring-1 focus:ring-amber-800 focus:border-amber-800 rounded-sm outline-none transition-all">
-                    <option>Email</option>
-                    <option>Phone Call</option>
-                    <option>Text Message</option>
+                  <select name="contact_method" className="w-full bg-[#fcfaf7] border border-stone-200 p-4 text-stone-900 text-sm focus:ring-1 focus:ring-amber-800 focus:border-amber-800 rounded-sm outline-none transition-all">
+                    <option value="Email">Email</option>
+                    <option value="Phone Call">Phone Call</option>
+                    <option value="Text Message">Text Message</option>
                   </select>
                 </div>
+
+                {error && (
+                  <p className="text-red-600 text-[10px] uppercase tracking-widest text-center mt-2 font-semibold">{error}</p>
+                )}
+
                 <div className="pt-4">
                   <button 
+                    disabled={isSubmitting}
                     type="submit"
-                    className="w-full py-5 bg-stone-900 hover:bg-stone-800 text-white text-xs uppercase tracking-widest font-bold transition-all shadow-xl rounded-sm"
+                    className="w-full py-5 bg-stone-900 hover:bg-stone-800 text-white text-xs uppercase tracking-widest font-bold transition-all shadow-xl rounded-sm disabled:opacity-50"
                   >
-                    Submit Information
+                    {isSubmitting ? 'Sending...' : 'Submit Information'}
                   </button>
                 </div>
                 <p className="text-[10px] text-stone-400 italic text-center leading-relaxed">
