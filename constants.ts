@@ -1,4 +1,3 @@
-
 import { Question } from './types';
 
 export const BASE_COMPENSATION = 8000;
@@ -18,7 +17,7 @@ export const VALUATION_QUESTIONS: Question[] = [
   {
     id: 'ethnicity',
     label: 'Ethnicity/Race',
-    description: 'High demand for scarce groups drives premiums; cultural matching is highly valued.',
+    description: 'High demand for specific ethnic backgrounds often drives market premiums.',
     options: [
       { label: 'White/Caucasian', premium: 5000 },
       { label: 'East Asian (e.g., Chinese, Japanese, Korean)', premium: 7000 },
@@ -32,20 +31,20 @@ export const VALUATION_QUESTIONS: Question[] = [
   {
     id: 'education',
     label: 'Education Level',
-    description: 'Higher education signals intelligence; Ivy League or top-tier adds major premiums.',
+    description: 'Higher education levels, particularly from top-tier institutions, command significant premiums.',
     options: [
       { label: 'High school/GED only', premium: 0 },
       { label: 'Associate\'s or some college', premium: 1000 },
       { label: 'Bachelor\'s degree (non-elite school)', premium: 3000 },
       { label: 'Bachelor\'s from Ivy League/top-tier (e.g., Harvard, Stanford, MIT)', premium: 10000 },
-      { label: 'Master\'s/PhD (standard)', premium: 5000 },
+      { label: 'Master\'s/PhD (any school)', premium: 5000 },
       { label: 'Master\'s/PhD (Ivy League/top-tier)', premium: 10000 }
     ]
   },
   {
     id: 'intelligence',
-    label: 'IQ or Intelligence Proxy',
-    description: 'Based on tested IQ or SAT/ACT scores (e.g., SAT 1400+ ≈ IQ 130+).',
+    label: 'Intelligence (IQ or SAT/ACT)',
+    description: 'Academic performance and cognitive testing are key desirability metrics.',
     options: [
       { label: 'IQ 140+ (or SAT 1500+)', premium: 5000 },
       { label: 'IQ 130–139 (or SAT 1400–1499)', premium: 3000 },
@@ -56,7 +55,7 @@ export const VALUATION_QUESTIONS: Question[] = [
   {
     id: 'height',
     label: 'Height',
-    description: 'Taller donors are often preferred for physical genetics resemblance.',
+    description: 'Physical genetics play a role in donor selection for resemblance matching.',
     options: [
       { label: '5\'9" or taller', premium: 2000 },
       { label: '5\'6"–5\'8"', premium: 1000 },
@@ -83,7 +82,7 @@ export const VALUATION_QUESTIONS: Question[] = [
   {
     id: 'athleticism',
     label: 'Athleticism',
-    description: 'Competitive sports signal exceptional physical health.',
+    description: 'Active lifestyles or competitive sports signaling exceptional health.',
     options: [
       { label: 'College/national-level athlete or awards', premium: 2000 },
       { label: 'Recreational sports/active lifestyle', premium: 500 },
@@ -93,7 +92,7 @@ export const VALUATION_QUESTIONS: Question[] = [
   {
     id: 'talents',
     label: 'Special Talents',
-    description: 'Musical, Artistic, or Multilingual abilities.',
+    description: 'Musical, artistic, or multilingual proficiency.',
     options: [
       { label: 'Professional/award-level', premium: 2000 },
       { label: 'Hobbyist level', premium: 1000 },
@@ -102,8 +101,8 @@ export const VALUATION_QUESTIONS: Question[] = [
   },
   {
     id: 'previousDonations',
-    label: 'Previous Successful Donations',
-    description: 'Proven fertility significantly increases value.',
+    label: 'Proven Fertility',
+    description: 'Previous successful donation cycles increase reliability and valuation.',
     options: [
       { label: '3+ successful cycles', premium: 10000 },
       { label: '1–2 successful cycles', premium: 5000 },
@@ -112,8 +111,8 @@ export const VALUATION_QUESTIONS: Question[] = [
   },
   {
     id: 'insurance',
-    label: 'Insurance Coverage',
-    description: 'Access to insurance-covered fertility drugs reduces agency costs.',
+    label: 'Insurance Access',
+    description: 'Coverage for fertility medications reduces external process costs.',
     options: [
       { label: 'Yes (full or partial coverage)', premium: 1000 },
       { label: 'No', premium: 0 }
